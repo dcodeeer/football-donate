@@ -1,0 +1,23 @@
+{
+  "name": "football-donate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run watch-scss\" \"npm run watch-js\" \"npm run serve\"",
+    "watch-scss": "node-sass src/css -o dist/css --watch",
+    "watch-js": "parcel watch src/js/*.js --out-dir dist/js --no-source-maps",
+    "serve": "browser-sync start --server --files 'dist/css/*.css, dist/css/pages/*.css, dist/js/*.js, *.html'",
+    "build": "npm run build-scss && npm run build-js",
+    "build-scss": "node-sass src/css -o dist/css",
+    "build-js": "parcel build src/js/*.js --out-dir dist/js"
+  },
+  "author": "dcoder",
+  "license": "ISC",
+  "devDependencies": {
+    "browsersync": "^0.0.1-security",
+    "concurrently": "^8.2.2",
+    "node-sass": "^9.0.0",
+    "parcel-bundler": "^1.12.5"
+  }
+}

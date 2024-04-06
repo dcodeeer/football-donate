@@ -124,6 +124,10 @@ if ($last_donations) {
           <input name='name'    type='text'   placeholder='Имя' required />
           <input name='message' type='text'   placeholder='Сообщение' required />
           <button>Отправить</button>
+          <div class='policy'>
+            <input id='checkbox' type='checkbox' name='policy' value='asdasdd' checked />
+            <label for='checkbox'><p>Нажимая кнопку "Отправить", я согласен с <a href='/private-policy.html' target='_blank'>политикой персональных данных</a></p></label>
+          </div>
         </form>
       </div>
     </section>

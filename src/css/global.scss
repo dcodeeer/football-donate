@@ -4,16 +4,24 @@
   --color-gray: #8C877B;
 }
 
-
+a {
+  color: #000;
+  text-decoration: none;
+}
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
-button, input {
+button, input, select {
   background: none;
   outline: none;
   border: none;
   font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+}
+option {
+  color: #000;
 }
 
 
@@ -244,7 +252,7 @@ section.donate {
       align-items: center;
       gap: 25px;
 
-      input {
+      input, select {
         width: 100%;
         color: #fff;
         font-size: 16px;
@@ -359,7 +367,7 @@ section.rating {
         display: flex;
         align-items: center;
         gap: 10px;
-        
+
         img {
           width: 30px;
         }

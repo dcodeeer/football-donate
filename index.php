@@ -1,8 +1,58 @@
+<?php
+
+require_once 'db.php';
+$lib = new Database();
+$db = $lib->getConnection();
+
+$teams = $db->query('SELECT * FROM teams ORDER BY id DESC')->fetchAll(PDO::FETCH_ASSOC);
+
+$last_donations = $db->query('SELECT *, (SELECT name FROM teams WHERE id = donations.team_id) as team, (SELECT logo FROM teams WHERE id = donations.team_id) as team_logo FROM donations ORDER BY id DESC LIMIT 3')->fetchAll(PDO::FETCH_ASSOC);
+
+$top_teams = $db->query('SELECT t.*, COALESCE(SUM(tm.amount), 0) AS total_amount
+FROM teams t
+LEFT JOIN donations tm ON t.id = tm.team_id
+GROUP BY t.id;')->fetchAll(PDO::FETCH_ASSOC);
+
+function convertDate($timestamp) {
+  $datetime = new DateTime($timestamp);
+  $now = new DateTime();
+  $diff = $now->diff($datetime);
+  if ($diff->d == 0) {
+    if ($diff->h == 0) {
+        if ($diff->i < 1) {
+            return 'только что';
+        } else {
+            return $diff->i . ' минут назад';
+        }
+    } else {
+        return $diff->h . ' часов назад';
+    }
+} elseif ($diff->d == 1 && $diff->h < 12) {
+    return 'вчера';
+} else {
+    return $datetime->format('d.m.Y в H:i');
+  }
+}
+
+if ($last_donations) {
+  $i = 0;
+  foreach ($last_donations as $item) {
+    $last_donations[$i]['date'] = convertDate($item['created_at']);
+    $i++;
+  }
+} else {
+  $last_donations = [];
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset='utf-8' />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Football</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +65,10 @@
     <div class='container'>
       <div class='logo'>LOGO</div>
       <nav>
-        <div class='item'>О сервисе</div>
-        <div class='item'>Рейтинг</div>
-        <div class='item'>Контакты</div>
-        <div class='last'>
+        <div class='item scroll-link' href='#about'>О сервисе</div>
+        <div class='item scroll-link' href='#last'>Последние пожертвования</div>
+        <div class='item scroll-link' href='#rating'>Рейтинг</div>
+        <div class='last scroll-link' href='#donate'>
           <span>Пожертвовать</span>
           <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
         </div>
@@ -37,7 +87,7 @@
       <div class='end'>Выбрать команду</div>
     </section>
 
-    <section class='about container'>
+    <section class='about container' id='about'>
       <div class='title'>О сервисе</div>
       <div class='text'>Есть много вариантов Lorem Ipsum, но большинство из них имеет не всегда приемлемые модификации, например, юмористические вставки или слова, которые даже отдалённо не напоминают латынь. Если вам нужен Lorem Ipsum для серьёзного проекта, вы наверняка не хотите какой-нибудь шутки, скрытой в середине абзаца.</div>
     </section>
@@ -57,63 +107,53 @@
       </div>
     </section>
 
-    <section class='donate'>
+    <section class='donate' id='donate'>
       <div class='container'>
         <div class='title'>Пожертвовать</div>
-        <div class='form'>
-          <input type='text' placeholder='Выбор команды' />
-          <input type='number' placeholder='Сумма в ₽' />
-          <input type='text' placeholder='Имя' />
-          <input type='text' placeholder='Сообщение' />
+        <form class='form' method='POST' action='payment.php'>
+          <select name='team'>
+            <?php
+            $i = 0;
+            foreach ($teams as $team) : ?>
+            <option <?php ($i == 0) ? 'selected' : '' ?> value='<?php echo $team['id']; ?>'><?php echo $team['name']; ?></option>
+            <?php
+            $i++;
+            endforeach; ?>
+          </select>
+          <input name='amount'  type='number' placeholder='Сумма в ₽' required />
+          <input name='name'    type='text'   placeholder='Имя' required />
+          <input name='message' type='text'   placeholder='Сообщение' required />
           <button>Отправить</button>
-        </div>
+        </form>
       </div>
     </section>
 
-    <section class='last-donations container'>
+    <section class='last-donations container' id='last'>
       <div class='title'>Последние пожертвования</div>
       <div class='list'>
 
-        <div class='item'>
-          <div class='top'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
-          </div>
-          <div class='message'>Поддерживаю любимый клуб!</div>
-          <div class='bottom'>
-            <div class='time'>2 минуты назад</div>
-            <div class='owner'>Алексей</div>
-          </div>
-        </div>
+        <?php
+        foreach ($last_donations as $donation) :
+        ?>
 
         <div class='item'>
           <div class='top'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
+            <img src='/uploads/<?php echo $donation['team_logo']; ?>' />
+            <div class='name'><?php echo $donation['team']; ?></div>
           </div>
-          <div class='message'>Поддерживаю любимый клуб!</div>
+          <div class='message'><?php echo $donation['message']; ?></div>
           <div class='bottom'>
-            <div class='time'>Час назад</div>
-            <div class='owner'>Алексей</div>
+            <div class='time'><?php echo $donation['date']; ?></div>
+            <div class='owner'><?php echo $donation['name']; ?></div>
           </div>
         </div>
-
-        <div class='item'>
-          <div class='top'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
-          </div>
-          <div class='message'>Поддерживаю любимый клуб!</div>
-          <div class='bottom'>
-            <div class='time'>Вчера</div>
-            <div class='owner'>Алексей</div>
-          </div>
-        </div>
+        
+        <?php endforeach; ?>
 
       </div>
     </section>
 
-    <section class='rating container'>
+    <section class='rating container' id='rating'>
       <div class='title'>Рейтинг команд</div>
 
       <div class='list'>
@@ -123,33 +163,24 @@
           <div class='team'>Команда</div>
           <div class='amount'>Сумма пожертвований</div>
         </div>
+
+        <?php 
+        $i = 1;
+        foreach ($top_teams as $team) : ?>
         
         <div class='row'>
-          <div class='top'>#1</div>
+          <div class='top'>#<?php echo $i; ?></div>
           <div class='team'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
+            <img src='uploads/<?php echo $team['logo']; ?>' />
+            <div class='name'><?php echo $team['name']; ?></div>
           </div>
-          <div class='amount'>15000₽</div>
-        </div>
-        
-        <div class='row'>
-          <div class='top'>#2</div>
-          <div class='team'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
-          </div>
-          <div class='amount'>1000₽</div>
+          <div class='amount'><?php echo $team['total_amount']; ?>₽</div>
         </div>
 
-        <div class='row'>
-          <div class='top'>#3</div>
-          <div class='team'>
-            <img src='/assets/barcelona.png' />
-            <div class='name'>FC Barcelona</div>
-          </div>
-          <div class='amount'>5000₽</div>
-        </div>
+        <?php
+        $i++;
+        endforeach; ?>
+
       </div>
     </section>
     
@@ -165,6 +196,21 @@
       </div>
     </div>
   </footer>
-  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" integrity="sha512-1PKqXBz2ju2JcAerHKL0ldg0PT/1vr3LghYAtc59+9xy8e19QEtaNUyt1gprouyWnpOPqNJjL4gXMRMEpHYyLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type='text/javascript'>
+  const navScrollToListener = (e) => {
+    gsap.to(window, {
+      duration: 1,
+      scrollTo: '',
+      scrollTo: { y: e.currentTarget.getAttribute('href'), offsetY: 100 },
+      ease: "Power1.easeInOut"
+    });
+  };
+
+  const navLinks = document.querySelectorAll('.scroll-link');
+  navLinks.forEach((navLink) => navLink.addEventListener('click', navScrollToListener));
+  </script>
 </body>
 </html>

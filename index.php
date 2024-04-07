@@ -84,7 +84,7 @@ if ($last_donations) {
         <div class='top'>Поддержи</div>
         <div class='bottom'>Любимую Команду</div>
       </div>
-      <div class='end'>Выбрать команду</div>
+      <div class='end scroll-link' href='#donate'>Выбрать команду</div>
     </section>
 
     <section class='about container' id='about'>
@@ -165,7 +165,7 @@ if ($last_donations) {
         <div class='row'>
           <div class='top'>Место</div>
           <div class='team'>Команда</div>
-          <div class='amount'>Сумма пожертвований</div>
+          <div class='amount'>Сумма</div>
         </div>
 
         <?php 

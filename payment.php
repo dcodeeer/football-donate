@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       'capture' => true,
       'confirmation' => array(
         'type' => 'redirect',
-        'return_url' => 'http://football-donate.local',
+        'return_url' => 'https://lovemyteam.ru',
       ),
       'description' => 'Оплата',
       'metadata' => array(

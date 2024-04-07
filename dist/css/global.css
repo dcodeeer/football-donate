@@ -32,7 +32,7 @@ body {
 
 .container {
   max-width: 1180px;
-  width: calc(100% - 10px);
+  width: calc(100% - 20px);
   margin: 0 auto; }
 
 header {
@@ -76,6 +76,9 @@ header {
           opacity: 0.8; }
         header .container nav .last svg {
           width: 25px; }
+  @media screen and (max-width: 712px) {
+    header .container nav .item {
+      display: none; } }
 
 footer {
   background-color: var(--color-blue);
@@ -106,7 +109,8 @@ section.first {
   height: calc(100vh - 100px); }
   section.first .subtitle {
     font-size: 24px;
-    color: var(--color-gray); }
+    color: var(--color-gray);
+    text-align: center; }
   section.first .title {
     font-size: 70px;
     font-weight: 700;
@@ -130,6 +134,13 @@ section.first {
     transition: 0.35s; }
     section.first .end:hover {
       box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2); }
+  @media screen and (max-width: 712px) {
+    section.first .title {
+      font-size: 32px; }
+      section.first .title .bottom {
+        border-radius: 20px; }
+    section.first .end {
+      font-size: 18px; } }
 
 section.about {
   padding: 40px 0;
@@ -144,10 +155,13 @@ section.about {
     font-size: 18px;
     text-align: center;
     line-height: 32px; }
+  @media screen and (max-width: 712px) {
+    section.about .title {
+      font-size: 28px; } }
 
 section.second {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 30px;
   padding: 80px 0; }
   section.second .item {
@@ -167,7 +181,7 @@ section.second {
 
 section.donate {
   background-color: var(--color-blue);
-  padding: 80px; }
+  padding: 80px 0; }
   section.donate .container {
     display: flex;
     flex-direction: column;
@@ -241,6 +255,9 @@ section.donate {
         transition: 0.35s; }
         section.donate .container .form button:hover {
           opacity: 0.7; }
+  @media screen and (max-width: 712px) {
+    section.donate .container .title {
+      font-size: 28px; } }
 
 section.last-donations {
   padding: 80px 0; }
@@ -250,7 +267,7 @@ section.last-donations {
     text-align: center; }
   section.last-donations .list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 32px; }
     section.last-donations .list .item {
       background: #fff;
@@ -275,6 +292,9 @@ section.last-donations {
         justify-content: space-between; }
         section.last-donations .list .item .bottom .time {
           color: rgba(0, 0, 0, 0.5); }
+  @media screen and (max-width: 712px) {
+    section.last-donations .title {
+      font-size: 28px; } }
 
 section.rating {
   padding: 0 0 80px 0; }
@@ -301,3 +321,9 @@ section.rating {
         gap: 10px; }
         section.rating .list .row .team img {
           width: 30px; }
+  @media screen and (max-width: 712px) {
+    section.rating .title {
+      font-size: 28px; }
+    section.rating .list .row {
+      grid-template-columns: 50px 1fr 50px;
+      gap: 10px; } }

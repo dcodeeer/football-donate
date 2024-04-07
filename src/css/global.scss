@@ -36,7 +36,7 @@ body {
 }
 .container {
   max-width: 1180px;
-  width: calc(100% - 10px);
+  width: calc(100% - 20px);
   margin: 0 auto;
 }
 
@@ -98,6 +98,16 @@ header {
       }
     }
   }
+
+  @media screen and (max-width: 712px) {
+    .container {
+      nav {
+        .item {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 footer {
@@ -143,6 +153,7 @@ section.first {
   .subtitle {
     font-size: 24px;
     color: var(--color-gray);
+    text-align: center;
   }
 
   .title {
@@ -176,6 +187,18 @@ section.first {
       box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.2);
     }
   }
+
+  @media screen and (max-width: 712px) {
+    .title {
+      font-size: 32px;
+      .bottom {
+        border-radius: 20px;
+      }
+    }
+    .end {
+      font-size: 18px;
+    }
+  }
 }
 
 section.about {
@@ -194,11 +217,17 @@ section.about {
     text-align: center;
     line-height: 32px;
   }
+
+  @media screen and (max-width: 712px) {
+    .title {
+      font-size: 28px;
+    }    
+  }
 }
 
 section.second {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
   gap: 30px;
   
   padding: 80px 0;
@@ -226,11 +255,15 @@ section.second {
       background-color: #F22C55;
     }
   }
+
+  @media screen and (max-width: 712px) {
+        
+  }
 }
 
 section.donate {
   background-color: var(--color-blue);
-  padding: 80px;
+  padding: 80px 0;
 
   .container {
     display: flex;
@@ -325,6 +358,14 @@ section.donate {
       }
     }
   }
+
+  @media screen and (max-width: 712px) {
+    .container {
+      .title {
+        font-size: 28px;
+      }    
+    }
+  }
 }
 
 section.last-donations {
@@ -338,7 +379,7 @@ section.last-donations {
 
   .list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 32px;
     .item {
       background: #fff;
@@ -381,6 +422,12 @@ section.last-donations {
       }
     }
   }
+
+  @media screen and (max-width: 712px) {
+    .title {
+      font-size: 28px;
+    }    
+  }
 }
 
 section.rating {
@@ -415,6 +462,18 @@ section.rating {
         img {
           width: 30px;
         }
+      }
+    }
+  }
+
+  @media screen and (max-width: 712px) {
+    .title {
+      font-size: 28px;
+    }
+    .list {
+      .row {
+        grid-template-columns: 50px 1fr 50px;
+        gap: 10px;
       }
     }
   }

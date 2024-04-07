@@ -1,11 +1,12 @@
 <?php
 
-require_once '../db.php';
+require_once 'db.php';
 $lib = new Database();
 $db = $lib->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
   http_response_code(404);
+  exit();
 }
 
 $payload = file_get_contents('php://input');
@@ -17,15 +18,15 @@ if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
     exit('Ошибка при декодировании JSON');
 }
 
-if ($data['notification'] != || $data['event'] != 'payment.succeeded') {
+if ($data['type'] != 'notification' || $data['event'] != 'payment.succeeded') {
   http_response_code(400);
   exit('Ошибка при декодировании JSON');
 }
 
-$amount  = data['object']['amount']['value'];
-$name    = data['object']['metadata']['name'];
-$message = data['object']['metadata']['message'];
-$team_id = data['object']['metadata']['team_id'];
+$amount  = $data['object']['amount']['value'];
+$name    = $data['object']['metadata']['name'];
+$message = $data['object']['metadata']['message'];
+$team_id = $data['object']['metadata']['team_id'];
 
 $stmt = $db->prepare('INSERT INTO donations (amount, name, message, team_id) VALUES (:amount, :name, :message, :team_id)');
 $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);

@@ -52,7 +52,11 @@ header {
     header .container .logo {
       font-size: 32px;
       font-weight: 700;
-      color: var(--color-blue); }
+      color: var(--color-blue);
+      height: 40px; }
+      header .container .logo img {
+        display: block;
+        height: 40px; }
     header .container nav {
       display: flex;
       align-items: center;
@@ -77,8 +81,10 @@ header {
         header .container nav .last svg {
           width: 25px; }
   @media screen and (max-width: 712px) {
-    header .container nav .item {
-      display: none; } }
+    header .container {
+      justify-content: center; }
+      header .container nav {
+        display: none; } }
 
 footer {
   background-color: var(--color-blue);
@@ -307,7 +313,7 @@ section.rating {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     padding: 25px;
     border-radius: 25px;
-    max-width: 600px;
+    max-width: 750px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -320,7 +326,8 @@ section.rating {
         align-items: center;
         gap: 10px; }
         section.rating .list .row .team img {
-          width: 30px; }
+          width: 40px;
+          height: 40px; }
   @media screen and (max-width: 712px) {
     section.rating .title {
       font-size: 28px; }

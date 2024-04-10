@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-session_start();
 if (empty($_SESSION['admin'])) {
   header('Location: /admin/login.php');
   die();

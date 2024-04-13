@@ -59,7 +59,7 @@ if ($last_donations) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
-  <link href='/dist/css/global.css' rel='stylesheet' />
+  <link href='/dist/css/global.css?v=1.0' rel='stylesheet' />
 </head>
 <body>
   <header>
@@ -133,6 +133,18 @@ if ($last_donations) {
             <label for='checkbox'><p>Нажимая кнопку "Отправить", я согласен с <a href='/private-policy.html' target='_blank'>политикой персональных данных</a></p></label>
           </div>
         </form>
+      </div>
+
+      <div class='modal'>
+        <div class='content'>
+          <div class='title'>Пожертвование</div>
+          <div class='description'>Чтобы пожертвовать нужную сумму, отправьте деньги по реквезитам(тинькофф) ниже и нажмите кнопку Я перевел(а)</div>
+          <div class='card'>5536 9141 2094 7795</div>
+          <div class='btns'>
+            <div class='btn close'>Отмена</div>
+            <div class='btn submit'>Я перевел(а)</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -219,6 +231,31 @@ if ($last_donations) {
 
   const navLinks = document.querySelectorAll('.scroll-link');
   navLinks.forEach((navLink) => navLink.addEventListener('click', navScrollToListener));
+
+
+  const body = document.querySelector('body');
+  const form = document.querySelector('form');
+  const modal = document.querySelector('.modal');
+  const close = modal.querySelector('.close');
+  const submitBtn = modal.querySelector('.submit');
+
+  const closeModal = () => {
+    modal.classList.remove('show');
+  };
+
+  const openModal = () => {
+    modal.classList.add('show');
+    close.addEventListener('click', closeModal);
+    submitBtn.addEventListener('click', () => {
+      form.submit();
+    });
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+
   </script>
 </body>
 </html>

@@ -188,6 +188,42 @@ section.second {
 section.donate {
   background-color: var(--color-blue);
   padding: 80px 0; }
+  section.donate .modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center; }
+    section.donate .modal .content {
+      max-width: 500px;
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center; }
+      section.donate .modal .content .title {
+        font-size: 24px; }
+      section.donate .modal .content .card {
+        font-size: 24px; }
+      section.donate .modal .content .btns {
+        display: flex;
+        gap: 10px; }
+        section.donate .modal .content .btns .btn {
+          background-color: #5875F5;
+          color: #fff;
+          padding: 12px 24px;
+          border-radius: 10px;
+          cursor: pointer; }
+  section.donate .modal.show {
+    display: flex; }
   section.donate .container {
     display: flex;
     flex-direction: column;

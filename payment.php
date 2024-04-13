@@ -1,5 +1,9 @@
 <?php
 
+require_once 'db.php';
+$lib = new Database();
+$db = $lib->getConnection();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $team = $_POST['team'];
   $amount = $_POST['amount'];
@@ -7,50 +11,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $message = $_POST['message'];
 
   if (isset($team) && isset($amount) && isset($name) && isset($message)) {
-    $url = 'https://api.yookassa.ru/v3/payments';
+    $stmt = $db->prepare('INSERT INTO donations (amount, name, message, team_id) VALUES (:amount, :name, :message, :team_id)');
+    $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':message', $message, PDO::PARAM_STR);
+    $stmt->bindParam(':team_id', $team, PDO::PARAM_INT);
+    $stmt->execute();
 
-    $data = array(
-      'amount' => array(
-        'value' => $amount . '.00',
-        'currency' => 'RUB'
-      ),
-      'capture' => true,
-      'confirmation' => array(
-        'type' => 'redirect',
-        'return_url' => 'https://lovemyteam.ru',
-      ),
-      'description' => 'Оплата',
-      'metadata' => array(
-        'name'    => $name,
-        'message' => $message,
-        'team_id' => $team,
-      ),
-    );
-    $json_data = json_encode($data);
+    header('Location: /#last');
 
-    $ch = curl_init();
+    die();
 
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    // $url = 'https://api.yookassa.ru/v3/payments';
 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Idempotence-Key: ' . uniqid(),
-        'Content-Length: ' . strlen($json_data),
-        'Authorization: Basic ' . base64_encode('365194:test_HyzzrDkEFNm_V9n98YxfJJFRrW96LuYaUWK9n0_QefA')
-    ));
+    // $data = array(
+    //   'amount' => array(
+    //     'value' => $amount . '.00',
+    //     'currency' => 'RUB'
+    //   ),
+    //   'capture' => true,
+    //   'confirmation' => array(
+    //     'type' => 'redirect',
+    //     'return_url' => 'https://lovemyteam.ru',
+    //   ),
+    //   'description' => 'Оплата',
+    //   'metadata' => array(
+    //     'name'    => $name,
+    //     'message' => $message,
+    //     'team_id' => $team,
+    //   ),
+    // );
+    // $json_data = json_encode($data);
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $ch = curl_init();
 
-    $response = curl_exec($ch);
+    // curl_setopt($ch, CURLOPT_URL, $url);
+    // curl_setopt($ch, CURLOPT_POST, true);
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
 
-    if($response === false) {
-        echo 'Ошибка cURL: ' . curl_error($ch);
-    }
-    curl_close($ch);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    //     'Content-Type: application/json',
+    //     'Idempotence-Key: ' . uniqid(),
+    //     'Content-Length: ' . strlen($json_data),
+    //     'Authorization: Basic ' . base64_encode('365194:test_HyzzrDkEFNm_V9n98YxfJJFRrW96LuYaUWK9n0_QefA')
+    // ));
 
-    $json = json_decode($response, true);
-    header('Location: ' . $json['confirmation']['confirmation_url']);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // $response = curl_exec($ch);
+
+    // if($response === false) {
+    //     echo 'Ошибка cURL: ' . curl_error($ch);
+    // }
+    // curl_close($ch);
+
+    // $json = json_decode($response, true);
+    // header('Location: ' . $json['confirmation']['confirmation_url']);
   }
 }

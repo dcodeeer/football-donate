@@ -59,7 +59,7 @@ if ($last_donations) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
-  <link href='/dist/css/global.css?v=1.0' rel='stylesheet' />
+  <link href='/dist/css/global.css?v=1.1' rel='stylesheet' />
 </head>
 <body>
   <header>
